@@ -294,6 +294,7 @@
 
 - (void)doubleClickWorkPeriod:(id)sender
 {
+  if( [tvWorkPeriods selectedRow] == -1 ) { return; }
   TWorkPeriod *wp = [documentController workPeriodAtIndex:[tvWorkPeriods selectedRow]];
 	[dtpEditWorkPeriodStartTime setDateValue: [wp startTime]];
 	[dtpEditWorkPeriodEndTime setDateValue: [wp endTime]];
