@@ -260,6 +260,10 @@
 	
 	[self initializeTableViews];
   
+  [_startDatePicker setDateValue:[NSDate dateWithTimeIntervalSinceNow:-2592000]]; // 30 days ago
+  [_endDatePicker setDateValue:[NSDate date]]; // today
+  [_startDatePicker setAction:@selector(startDatePicked:)];
+  [_endDatePicker setAction:@selector(endDatePicked:)];
 }
 
 - (void)initializeTableViews
@@ -919,52 +923,97 @@
 }
 
 
+#pragma mark Date Filtering
+- (void)showDateRangeControls; {
+  [_startDateButton setState:YES];
+  [_endDateButton setState:YES];
+  [_startDatePicker setHidden:NO];
+  [_endDatePicker setHidden:NO];
+}
+- (void)hideDateRangeControls; {
+  [_startDateButton setState:NO];
+  [_endDateButton setState:NO];
+  [_startDatePicker setHidden:YES];
+  [_endDatePicker setHidden:YES];
+}
 - (IBAction)filterToAll:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController clearFilter];
+}
+
+- (IBAction)filterToDateRange:sender; {
+  [self showDateRangeControls];
+  [documentController setFilterStartTime:[_startDatePicker dateValue] endTime:[_endDatePicker dateValue]];
 }
 
 - (IBAction)filterToToday:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider todayStartTime]
 	  endTime:[timeProvider todayEndTime]];
 }
 
 - (IBAction)filterToYesterday:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider yesterdayStartTime]
 	  endTime:[timeProvider yesterdayEndTime]];
 }
 
 - (IBAction)filterToThisWeek:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider thisWeekStartTime]
 	  endTime:[timeProvider thisWeekEndTime]];
 }
 
 - (IBAction)filterToLastWeek:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider lastWeekStartTime]
 	  endTime:[timeProvider lastWeekEndTime]];
 }
 
 - (IBAction)filterToWeekBeforeLast:(id)sender
 {
+  [self hideDateRangeControls];
   [documentController setFilterStartTime:[timeProvider weekBeforeLastStartTime]
 	  endTime:[timeProvider weekBeforeLastEndTime]];
 }
 
 - (IBAction)filterToThisMonth:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider thisMonthStartTime]
 	  endTime:[timeProvider thisMonthEndTime]];
 }
 
 - (IBAction)filterToLastMonth:(id)sender
 {
+  [self hideDateRangeControls];
 	[documentController setFilterStartTime:[timeProvider lastMonthStartTime]
 	  endTime:[timeProvider lastMonthEndTime]];
 }
+
+- (IBAction)dateFromButton:sender; {
+  [_startDatePicker setHidden: ![_startDatePicker isHidden]];
+}
+- (IBAction)dateToButton:sender; {
+  [_endDatePicker setHidden: ![_endDatePicker isHidden]];
+}
+
+// If you click on one of the date pickers, we automatically go into filtered mode
+- (void)startDatePicked:sender; {
+  [_dateFilterButton selectItemWithTag:42];
+  [documentController setFilterStartTime:[_startDatePicker dateValue] endTime:[_endDatePicker dateValue]];
+}
+- (void)endDatePicked:sender; {
+  [_dateFilterButton selectItemWithTag:42];
+  [documentController setFilterStartTime:[_startDatePicker dateValue] endTime:[_endDatePicker dateValue]];
+}
+
+
 
 #pragma mark TTResources methods
 

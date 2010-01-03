@@ -33,6 +33,12 @@
 	IBOutlet NSMenuItem *startMenuItem;
   IBOutlet NSMenu *statusItemMenu;
   
+  IBOutlet NSPopUpButton * _dateFilterButton;
+  IBOutlet NSButton * _startDateButton;
+  IBOutlet NSButton * _endDateButton;
+  IBOutlet NSDatePicker * _startDatePicker;
+  IBOutlet NSDatePicker * _endDatePicker;
+  
   TTStatusItemController *statusItemController;
 	NSToolbarItem *startstopToolbarItem;
 	
@@ -67,6 +73,7 @@
 - (IBAction)actionExport:(id)sender;
 
 - (IBAction)filterToAll:(id)sender;
+- (IBAction)filterToDateRange:sender;
 - (IBAction)filterToToday:(id)sender;
 - (IBAction)filterToYesterday:(id)sender;
 - (IBAction)filterToThisWeek:(id)sender;
@@ -74,6 +81,9 @@
 - (IBAction)filterToWeekBeforeLast:(id)sender;
 - (IBAction)filterToThisMonth:(id)sender;
 - (IBAction)filterToLastMonth:(id)sender;
+
+- (IBAction)dateFromButton:sender;
+- (IBAction)dateToButton:sender;
 
 - (void)stopTimer;
 - (void)startTimer;
