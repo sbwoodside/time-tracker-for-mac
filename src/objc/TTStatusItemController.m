@@ -9,60 +9,64 @@
 
 @implementation TTStatusItemController
 
-- (id)initWithStatusItem:(id<NIStatusItem>)aStatusItem 
-               resources:(id<TTResources>)aResources
-        applicationState:(TTApplicationState*)anAppState
+- (id)initWithStatusItem:(NSStatusItem *)statusItem
+               resources:(id<TTResources>)resources
+                delegate:(id<TTStatusItemControllerDelegate>)delegate;
 {
   self = [super init];
-  statusItem = [aStatusItem retain];
-  appState = [anAppState retain];
+  _statusItem = [statusItem retain];
+  _delegate = delegate;
   
-  playItemImage = [[aResources playItemImage] retain];//[[NSImage imageNamed:@"playitem.png"] retain];
-  //playItemHighlightImage = [[NSImage imageNamed:@"playitem_hl.png"] retain];
-  stopItemImage = [[aResources stopItemImage] retain];//[[NSImage imageNamed:@"stopitem.png"] retain];
-  //stopItemHighlightImage = [[NSImage imageNamed:@"stopitem_hl.png"] retain];
+  _playItemImage = [[NSImage imageNamed:@"playitem.png"] retain];
+  _playItemHighlightImage = [[NSImage imageNamed:@"playitem_hl.png"] retain];
+  _stopItemImage = [[NSImage imageNamed:@"stopitem.png"] retain];
+  _stopItemHighlightImage = [[NSImage imageNamed:@"stopitem_hl.png"] retain];
   
-  //[statusItem setTarget: self];
-  //[statusItem setMenu:statusItemMenu];
-  //[statusItem setAction: @selector (clickedStartStopTimer:)];
+  [_statusItem setTarget: self];
+  //[_statusItem setMenu:statusItemMenu];
+  [_statusItem setAction:@selector(clicked:)]; // @selector (clickedStartStopTimer:)];
   
-  //[statusItem setMenu:m]; // retains m
-  //[statusItem setToolTip:[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleNameKey]];
-  //[statusItem setHighlightMode:NO];
+  [_statusItem setToolTip:[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleNameKey]];
+  [_statusItem setHighlightMode:NO];
   
   return self;
 }
 
 - (void)dealloc
 {
-  [playItemImage release];
-  [playItemHighlightImage release];
-  [stopItemImage release];
-  [stopItemHighlightImage release];
-  [statusItem release];
-  [appState release];
+  [_playItemImage release];
+  [_playItemHighlightImage release];
+  [_stopItemImage release];
+  [_stopItemHighlightImage release];
+  [_statusItem release];
   [super dealloc];
 }
 
 - (void)update
 {
+  TTApplicationState * appState = [_delegate applicationState];
   assert(appState != nil);
-  assert(playItemImage != nil);
-  assert(stopItemImage != nil);
-  if (![appState isTimerRunning])
+  assert(_playItemImage != nil);
+  assert(_stopItemImage != nil);
+  if ( appState.timerRunning == NO )
   {
-    [statusItem setImage:playItemImage];
-    [statusItem setTitle:@"Start"];
-    image = playItemImage;
+    [_statusItem setImage:_playItemImage];
+    //[statusItem setTitle:@"Start"];
+    _image = _playItemImage;
     //[statusItem setAlternateImage:playItemHighlightImage];
   }
   else
   {
-    [statusItem setImage:stopItemImage];
-    [statusItem setTitle:@"Stop"];
-    image = stopItemImage;
+    [_statusItem setImage:_stopItemImage];
+    //[statusItem setTitle:@"Stop"];
+    _image = _stopItemImage;
     //[statusItem setAlternateImage:stopItemHighlightImage];
   }
+}
+
+- (void)clicked:(NSStatusItem *)statusItem; {
+  [_delegate statusItemClicked:statusItem];
+  [self update];
 }
 
 @end

@@ -11,23 +11,27 @@
 #import "NIStatusItem.h"
 #import "NIImage.h"
 
+@protocol TTStatusItemControllerDelegate
+- (void)statusItemClicked:(NSStatusItem *)statusItem;
+- (TTApplicationState *)applicationState;
+@end
+
 @interface TTStatusItemController : NSObject
 {
-  TTApplicationState* appState;
+  id<TTStatusItemControllerDelegate> _delegate;
   
-  id<NIStatusItem> statusItem;
-  id<NIImage> image;
+  NSStatusItem * _statusItem;
+  NSImage * _image;
   
-  id<NIImage> playItemImage;
-  id<NIImage> playItemHighlightImage;
-  id<NIImage> stopItemImage;
-  id<NIImage> stopItemHighlightImage;
+  NSImage * _playItemImage;
+  NSImage * _playItemHighlightImage;
+  NSImage * _stopItemImage;
+  NSImage * _stopItemHighlightImage;
 }
 
-- (id)initWithStatusItem:(id<NIStatusItem>)aStatusItem 
-               resources:(id<TTResources>)aResources
-        applicationState:(TTApplicationState*)anAppState;
-
+- (id)initWithStatusItem:(NSStatusItem *)statusItem
+               resources:(id<TTResources>)resources
+                delegate:(id<TTStatusItemControllerDelegate>)delegate;
 - (void)update;
 
 @end

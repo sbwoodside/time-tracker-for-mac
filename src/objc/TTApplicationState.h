@@ -9,8 +9,8 @@
 
 @interface TTApplicationState : NSObject
 {
+  BOOL _timerRunning;
 }
-
-- (BOOL)isTimerRunning;
+@property BOOL timerRunning;
 
 @end

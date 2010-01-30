@@ -96,6 +96,8 @@
 	_curProject = _selProject;
 	_curTask = _selTask;
 	
+  appState.timerRunning = YES;
+  
 	// assert [timer isRunning]
 	// assert _curProject != nil
 	// assert _curTask != nil
@@ -118,6 +120,8 @@
 	[tvProjects reloadData];
 	[tvTasks reloadData];
 	[tvWorkPeriods reloadData];
+  
+  appState.timerRunning = NO;
 	
 	// assert ![timer isRunning]
 	// assert _curProject == nil
@@ -248,12 +252,11 @@
 	[toolbar setDelegate: self];
 	[mainWindow setToolbar: toolbar];	
 
-  TTApplicationState* appState = [[TTApplicationState alloc] init];
-  NSStatusItem *statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-  statusItemController = [[TTStatusItemController alloc] 
-                            initWithStatusItem:statusItem  
-                            resources:self
-                          applicationState:appState];
+  appState = [[TTApplicationState alloc] init];
+  NSStatusItem * statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+  statusItemController = [[TTStatusItemController alloc] initWithStatusItem:statusItem  
+                                                                  resources:self
+                                                                   delegate:self];
   
 	[self updateStartStopState];
   [statusItemController update];
@@ -1026,6 +1029,16 @@
 - (id<NIImage>)stopItemImage
 {
   return [[AVImage imageNamed:@"stopitem"] autorelease];
+}
+
+
+#pragma mark TTStatusItemControllerDelegate
+
+- (void)statusItemClicked:(NSStatusItem *)statusItem; {
+  [self clickedStartStopTimer:statusItem];
+}
+- (TTApplicationState *)applicationState; {
+  return appState;
 }
 
 

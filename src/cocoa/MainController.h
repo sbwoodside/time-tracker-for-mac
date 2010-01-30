@@ -10,7 +10,7 @@
 #import "TTDocumentLoader.h"
 #import "TTStatusItemController.h"
 
-@interface MainController : NSObject <TTResources>
+@interface MainController : NSObject <TTResources, TTStatusItemControllerDelegate>
 {
 	NSUserDefaults *defaults;
 	
@@ -41,7 +41,8 @@
   
   TTStatusItemController *statusItemController;
 	NSToolbarItem *startstopToolbarItem;
-	
+	TTApplicationState * appState;
+  
 	TTDocumentV1 *document;
   id documentController;
   TTDocumentLoader *documentLoader;

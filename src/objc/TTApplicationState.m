@@ -8,21 +8,6 @@
 #import "TTApplicationState.h"
 
 @implementation TTApplicationState
-
-- (id)init
-{
-  self = [super init];
-  return self;
-}
-
-- (void)dealloc
-{
-  [super dealloc];
-}
-
-- (BOOL)isTimerRunning
-{
-  return false;
-}
+@synthesize timerRunning = _timerRunning;
 
 @end
